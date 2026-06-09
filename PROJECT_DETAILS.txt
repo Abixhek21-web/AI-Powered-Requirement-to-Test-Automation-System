@@ -1,0 +1,65 @@
+# PROJECT TECHNICAL DOCUMENTATION: AI TEST GENERATOR (HACKATHON EDITION)
+
+## 1. Project Overview
+This project is an AI-powered system designed to automate the manual, time-consuming process of translating Business Requirement Documents (BRDs) into actionable test cases and automation scripts. It utilizes a Retrieval-Augmented Generation (RAG) architecture paired with the latest Gemini 2.5 Flash model to provide high-accuracy, context-aware testing artifacts.
+
+## 2. Core Architecture: How it Works
+The system follows a modular RAG pipeline:
+
+### A. Requirement Ingestion (The Ingestion Layer)
+- **Document Loading:** Supports PDF, TXT, and DOCX formats using `langchain_community` loaders.
+- **Text Splitting:** Uses `RecursiveCharacterTextSplitter` to break documents into logical chunks (1000 characters with 200 overlap) to preserve context.
+
+### B. Hybrid Retrieval (The Intelligence Layer)
+- **Dense Retrieval (FAISS):** Uses `GoogleGenerativeAIEmbeddings` to perform semantic searches, understanding the *meaning* of the requirements.
+- **Sparse Retrieval (BM25):** Performs keyword-based searches to ensure specific terms (like "REQ-001" or field names) are not missed.
+- **Reciprocal Rank Fusion (RRF):** Merges results from both retrievers (70% weight to FAISS, 30% to BM25) to provide the most relevant context to the LLM.
+
+### C. Generation (The Engine)
+- **Test Case Generation:** Translates requirement context into Gherkin-style or tabular functional test cases (Step-by-Step).
+- **Automation Scripting:** Conceives Page Object Model (POM) structured scripts in Playwright, Selenium, or Cypress.
+
+## 3. Key Innovations (The "Wow" Factors)
+Our solution introduces four unique, cutting-edge features that set it apart from standard AI wrappers:
+
+1. **Multimodal UI-to-Code:**
+   - **Capability:** Upload a UI mockup/image.
+   - **Innovation:** The AI "sees" the UI layout, infers web selectors (IDs, Classes) based on visual arrangement, and writes an automation script before the developer even starts coding.
+
+2. **Self-Healing Test Engine:**
+   - **Capability:** Repaints broken scripts.
+   - **Innovation:** If a test fails due to a UI change, the user pastes the error log and the new DOM snippet. The AI identifies the broken locator and fixes the code automatically.
+
+3. **Synthetic Test Data Architect:**
+   - **Capability:** Business Rule-compliant data generation.
+   - **Innovation:** Generates realistic, high-volume JSON test data that follows complex business logic (e.g., "Must be >18 with Credit Score > 700") without using real PII, ensuring security and compliance.
+
+4. **Agentic API Chaos Monkey:**
+   - **Capability:** Security & Edge-case fuzzing.
+   - **Innovation:** Ingests an API Spec (Swagger) and generates a "Chaos Monkey" Python script that launches SQL injection attempts, boundary violations, and payload mutations to test system resilience.
+
+## 4. Technical Stack
+- **Backend:** Flask (Python)
+- **LLM / AI:** Gemini 1.5/2.5 Flash (via Google Generative AI SDK)
+- **Orchestration:** LangChain (Retriever, Text Splitters, Embeddings)
+- **Vector Database:** FAISS (Facebook AI Similarity Search)
+- **Frontend:** HTML5, CSS3 (Glassmorphism design), Vanilla JavaScript
+- **DevOps Support:** Generates scripts for Playwright, Selenium, Cypress, and Python Requests.
+
+## 5. Why it is Better Than Existing Solutions
+- **Traceability:** Unlike generic LLM prompts, our RAG pipeline ensures every test case is grounded in actual requirement text.
+- **Visual Context:** Integration of Gemini's Vision capabilities allows testing to start at the design phase (Figma/Images), not just the documentation phase.
+- **Maintenance-Focused:** The "Auto-Heal" feature solves the #1 pain point in automation: flaky tests and high maintenance costs.
+- **Security-First:** Synthetic data and Chaos Engineering modules turn a standard testing tool into a security-aware quality platform.
+
+## 6. Project Directory Structure
+- `app.py`: Flask server and API endpoints.
+- `src/ingestion.py`: Document loading and chunking logic.
+- `src/retriever.py`: Hybrid FAISS + BM25 RAG logic.
+- `src/generator.py`: LLM prompt templates and innovation logic (healing, chaos, multimodal).
+- `static/`: Modern UI assets (CSS/JS).
+- `templates/`: Main web interface.
+- `data/input/`: Storage for requirement documents.
+
+---
+**Prepared for Hackathon Presentation 2026**
